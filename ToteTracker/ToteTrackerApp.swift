@@ -10,9 +10,14 @@ import SwiftData
 
 @main
 struct ToteTrackerApp: App {
+    
+    @AppStorage("isLoggedIn") private var isLoggedIn: Bool = false
+    
+    
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Item.self,
+            User.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
@@ -25,6 +30,16 @@ struct ToteTrackerApp: App {
 
     var body: some Scene {
         WindowGroup {
+            ZStack{
+                if isLoggedIn {
+                    HomeView()
+                        .transition(.move(edge: .trailing))
+                }
+                else {
+                    SignupView()
+                        .transition(.move(edge: .leading))
+                }
+            }
             ContentView()
         }
         .modelContainer(sharedModelContainer)
